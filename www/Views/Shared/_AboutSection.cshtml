@@ -1,0 +1,32 @@
+﻿@inject IUnitOfWork _uow
+
+<section class="page-section bg-primary text-white mb-0" id="about">
+    <div class="container">
+        <!-- About Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-white">HAKKIMIZDA</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom divider-light">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+        <!-- About Section Content-->
+        <div class="row">
+            @foreach (var about in _uow.About.GetAll())
+            {
+                <div class="col-lg-6 text-justify ml-auto">
+                    <p>
+                        @about.Description
+                    </p>
+                </div>    
+            }
+        </div>
+        <!-- About Section Button-->
+        <div class="text-center mt-4">
+            <a class="btn btn-xl btn-outline-light" href="/admin/home/register">
+                <i class="fa fa-star mr-2"></i>
+                ÜCRETSİZ ÜYE OL!
+            </a>
+        </div>
+    </div>
+</section>

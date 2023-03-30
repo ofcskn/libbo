@@ -1,0 +1,355 @@
+﻿@inject IUnitOfWork _uow
+@{
+    ViewData["Title"] = "List";
+    var list = _uow.Media.GetAll();
+}
+@section style{
+    <link href="~/lib/cropperjs-master/dist/cropper.css" rel="stylesheet" />
+    <style>
+        .btn-white
+        {
+            background-color: #fff;
+            font-size: 20px;
+        }
+
+        .btn-white-outline
+        {
+            background-color: transparent;
+            color: #fff;
+            border: 1.8px solid #fff;
+            font-size: 20px;
+        }
+
+            .btn-white-outline:hover
+            {
+                background-color: #fff;
+                color: #222222;
+            }
+
+            .btn-white-outline:focus
+            {
+                background-color: #fff;
+                color: #222222;
+            }
+
+        .btn-danger-outline
+        {
+            border: 1px solid #ba2f2f;
+            font-size: 20px;
+        }
+
+            .btn-danger-outline i
+            {
+                color: #ba2f2f;
+            }
+
+        .btn-white:hover
+        {
+            background-color: #ba2f2f;
+            transition: 0.3s ease;
+        }
+
+        .btn-danger-outline:hover
+        {
+            background-color: #ba2f2f;
+            transition: 0.3s ease;
+        }
+
+        .btn-white:hover i
+        {
+            transition: 0.3s ease;
+            color: #fff !important;
+        }
+
+        .btn-danger-outline:hover i
+        {
+            transition: 0.3s ease;
+            color: #fff !important;
+        }
+
+        .deleteConfirmModal .img-modal
+        {
+            width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .deleteConfirmModal .delete-text
+        {
+            margin: 20px 0;
+            line-height: 1.5;
+            font-weight: 200;
+        }
+
+        .zoomConfirmModal .img-modal
+        {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+}
+@section script{
+    <script src="~/lib/cropperjs-master/dist/cropper.js"></script>
+    <script src="~/js/media.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('image');
+            var croppedImage = $('#croppedImage');
+            var croppedImageContainer = $('.cropped-img-container');
+            var cropModalBtn = $(".cropModalBtn");
+            var resultConfirmBtn = $("#resultConfirmBtn");
+            var cropBtn = $('#cropBtn');
+            var $alert = $('.alert');
+            var $modalProgress = $('.modal-progress');
+            var $progressBar = $('.progress-bar');
+            var $modal = $('#cropModal');
+            var cropper;
+
+            cropModalBtn.on('click', function (e) {
+                var filename_value = $(this).data('filename');
+                image.src = "/upload/" + filename_value;
+                //croppedImage.attr("src", "/admin/img/" + filename_value);
+                croppedImageContainer.hide();
+                resultConfirmBtn.hide();
+                $alert.hide();
+                $modalProgress.hide();
+                $modal.modal('show');
+
+            });
+
+            $modal.on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                    //aspectRatio: 16 / 9,
+                    viewMode: 3,
+                });
+            }).on('hidden.bs.modal', function () {
+                cropper.destroy();
+                cropper = null;
+            });
+
+            cropBtn.on("click", function () {
+                var initialAvatarURL;
+                var canvas;
+
+                if (cropper) {
+                    canvas = cropper.getCroppedCanvas({
+                        width: 1920,
+                        height: 1080,
+                    });
+
+                    resultConfirmBtn.show();
+
+                    croppedImage.attr("src", canvas.toDataURL());
+                    initialAvatarURL = canvas.toDataURL();
+                    croppedImageContainer.show();
+                    $alert.removeClass('alert-success alert-warning');
+
+                    canvas.toBlob(function (blob) {
+                        var formData = new FormData();
+                        formData.append('avatar', blob, 'avatar.jpg');
+                        resultConfirmBtn.on("click", function () {
+                            setTimeout(function () {
+                                $modalProgress.show();
+                            }, 200);
+                            setTimeout(function () {
+                                $.ajax({
+                                    url: "/admin/media/manage",
+                                    method: 'POST',
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+
+                                    xhr: function () {
+                                        var xhr = new XMLHttpRequest();
+
+                                        xhr.upload.onprogress = function (e) {
+                                            var percent = '0';
+                                            var percentage = '0%';
+
+                                            if (e.lengthComputable) {
+                                                percent = Math.round((e.loaded / e.total) * 100);
+                                                percentage = percent + '%';
+                                                $progressBar.width(percentage).attr('aria-valuenow', percent).text(percentage);
+                                            }
+                                        };
+
+                                        return xhr;
+                                    },
+
+                                    success: function () {
+                                        setTimeout(function () {
+                                            $modalProgress.hide();
+                                        }, 500);
+                                        setTimeout(function () {
+                                            $alert.show().addClass('alert-success').text('Yükleme Başarılı.');
+                                        }, 1000);
+                                        setTimeout(function () {
+                                            window.location.reload();
+                                        }, 3000);
+
+                                    },
+
+                                    error: function () {
+                                        avatar.src = initialAvatarURL;
+                                        setTimeout(function () {
+                                            $modalProgress.hide();
+                                        }, 1000);
+                                        setTimeout(function () {
+                                            $alert.show().addClass('alert-warning').text('Yükleme Başarısız. Tekrar Deneyin.');
+                                        }, 1500);
+                                        setTimeout(function () {
+                                            window.location.reload();
+                                        }, 3000);
+                                    },
+                                });
+                            }, 500);
+
+                        });
+                    });
+                }
+            });
+        });
+
+    </script>
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Galeri</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="portlet-body">
+                        <section class="gallery" id="main-content">
+                            <div id="alertTop" class="alert alert-success" role="alert">
+
+                            </div>
+                            @if (list.Count() == 0)
+                            {
+                                <div class="no-image">
+                                    <h4 class="no-image-text">Yüklenmiş fotoğrafınız bulunmamaktadır.</h4>
+                                    <a asp-controller="Media" asp-action="Manage" class="btn btn-success">Yeni Resim Ekle</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    @foreach (var image in list)
+                                    {
+                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 desc ">
+                                            <div class="project-wrapper ">
+                                                <div class="project">
+                                                    <input class="selectBox" type="checkbox" name="selectCheckBox" data-filename="@image.FileNames" />
+                                                    <div class="photo-wrapper">
+                                                        <div class="photo">
+                                                            <a>
+                                                                <img class="img-responsive" src="/upload/@image.FileNames" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="overlay">
+                                                            <!-- Button trigger modal -->
+                                                            <button data-filename="@image.FileNames" type="button" class="btn-white-outline btn zoomModalBtn">
+                                                                <i class="fa fa-search-plus"></i>
+                                                            </button>
+                                                            <!-- Button trigger modal -->
+                                                            <button data-filename="@image.FileNames" type="button" class="btn-white btn deleteModalBtn">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                            <button data-filename="@image.FileNames" type="button" class="btn-white-outline btn cropModalBtn">
+                                                                <i class="fa fa-crop"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    }
+                                    <!--Crop Confirm Modal-->
+                                    <div class="modal" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalLabel">Resmi Kırp</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="img-container">
+                                                        <img id="image" src="https://avatars0.githubusercontent.com/u/3456749">
+                                                    </div>
+                                                    <div class="cropped-img-container">
+                                                        <img id="croppedImage" src="">
+                                                    </div>
+                                                    <div class="alert" role="alert"></div>
+                                                </div>
+                                                <div class="modal-progress">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal Et</button>
+                                                    <button type="button" class="btn btn-success" id="cropBtn">Önizle</button>
+                                                    <button type="button" class="btn btn-success" id="resultConfirmBtn">Kırp</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Delete Confirm Modal-->
+                                    <div class="deleteConfirmModal modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteConfirmModalLabel">Resmi Sil</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img class="img-modal confirmImg" src="" alt="">
+                                                    <h4 class="delete-text">Onayladığınız taktirde fotoğraf galeriden silinecek. Devam edecek misiniz?</h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Galeriye Dön</button>
+                                                    <button type="button" value="" id="btnDelete" class="btn-danger-outline btn"><i class="fa fa-trash"></i></button>
+                                                    <button type="button" value="" id="btnDeleteSelect" class="btn-danger btn"><i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--ZOOM Confirm Modal-->
+                                    <div class="zoomConfirmModal modal fade" id="zoomConfirmModal" tabindex="-1" aria-labelledby="zoomConfirmModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <img class="img-modal confirmImg" src="" alt="">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Galeriye Dön</button>
+                                                    <a asp-controller="Media" asp-action="Manage" class="btn-success btn"><i class="fa fa-plus"></i>RESİM EKLE</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </section>
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

@@ -1,0 +1,320 @@
+﻿@inject IUnitOfWork _uow
+
+@{
+    ViewData["Title"] = "Index";
+}
+@section style{
+    <link href="~/lib/chart.js/dist/Chart.css" rel="stylesheet" />
+    <style>
+        .myChart
+        {
+            width: 100%;
+            height: 300px;
+        }
+
+        #map
+        {
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        .site-report
+        {
+            width: auto;
+        }
+
+        .world-map
+        {
+            position: relative;
+            background: #fff;
+        }
+
+        .weather
+        {
+            margin: 50px 0;
+        }
+
+            .weather .weatherwidget
+            {
+                margin-bottom: 20px;
+            }
+
+        .widget-list .grid-widget
+        {
+            padding: 0 20px;
+            margin-bottom:20px;
+        }
+
+            .widget-list .grid-widget .widget
+            {
+                background: #ff6a00;
+                color: #fff;
+                padding: 20px;
+                height: 175px;
+                display:flex;
+                align-items:center;
+            }
+
+            .widget-list .grid-widget .widget-gray
+            {
+                background: #606060;
+            }
+
+            .widget-list .grid-widget .widget-blue
+            {
+                background: #005ec4;
+            }
+
+            .widget-list .grid-widget .widget-yellow
+            {
+                background: #ffd800;
+            }
+
+            .widget-list .grid-widget .widget-darkred
+            {
+                background: #c60000;
+            }
+
+
+            .widget-list .grid-widget .widget-purple
+            {
+                background: #ed00a7;
+            }
+
+            .widget-list .grid-widget .widget .icon
+            {
+                font-size: 40px;
+                color: #fff;
+                margin: 10px;
+            }
+
+            .widget-list .grid-widget .widget .icon-text
+            {
+                text-align: center;
+            }
+
+                .widget-list .grid-widget .widget .icon-text h3
+                {
+                    font-weight: 700;
+                    font-size: 38px;
+                }
+
+                .widget-list .grid-widget.widget .icon-text p
+                {
+                    font-weight: 400;
+                    font-size: 22px;
+                }
+    </style>
+}
+@section script{
+    <script src="~/lib/world-map-trial/mapdata.js"></script>
+    <script src="~/lib/world-map-trial/worldmap.js"></script>
+    <script src="~/lib/chart.js/dist/Chart.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
+
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Anasayfa</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+
+                    <div class="widget-list">
+                        <div class="row">
+                            <div class="grid-widget col-sm-6 col-xl-3">
+                                <div class="widget widget-purple row">
+                                    <div class="icon col-sm-3">
+                                        <i class="fa fa-dollar"></i>
+                                    </div>
+                                    <div class="icon-text col-sm-8">
+                                        <h3>@_uow.Member.GetAll().Count()</h3>
+                                        <p>Toplam Üye Sayısı</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-widget col-sm-6 col-xl-3">
+                                <div class="widget widget-blue row">
+                                    <div class="icon col-sm-3">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <div class="icon-text col-sm-8">
+                                        <h3>@_uow.Book.GetAll().Count()</h3>
+                                        <p>Toplam Kitap Sayısı</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-widget col-sm-6 col-xl-3">
+                                <div class="widget widget-darkred row">
+                                    <div class="icon col-sm-3">
+                                        <i class="fa fa-tint"></i>
+                                    </div>
+                                    <div class="icon-text col-sm-8">
+                                        <h3>@_uow.Staff.GetAll().Count()</h3>
+                                        <p>Toplam Personel Sayısı</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-widget col-sm-6 col-xl-3">
+                                <div class="widget widget-gray row">
+                                    <div class="icon col-sm-3">
+                                        <i class="fa fa-paperclip"></i>
+                                    </div>
+                                    <div class="icon-text col-sm-8">
+                                        <h3>@_uow.Author.GetAll().Count()</h3>
+                                        <p>Yazar Sayısı</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Chart and To do List-->
+                    <div class="total-sales">
+                        <div class="user-trends">
+                            <div class="alert-close7"> </div>
+                            <!--Chart Script-->
+                            <canvas id="myChart"></canvas>
+
+                        </div>
+                        <div class="to-do">
+                            <div class="alert-close5"> </div>
+                            <h3>Yapılacaklar Listesi</h3>
+                            <div class="checkbox-form">
+                                @foreach (var todo in _uow.ToDoList.GetAllByEnabled())
+                                {
+                                    <div class="check">
+                                        <div class="row">
+                                            <input type="checkbox" class="col-sm-2 form-check" />
+                                            <label class="col-sm-10">@todo.Goal</label>
+                                        </div>
+                                        
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!--Wordl Map-->
+                    <div class="total-world">
+                        <div class="row">
+                            <div class="world-map col-sm-6">
+                                <div id="map">
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="site-report">
+                                    <div class="alert-close3"> </div>
+                                    <h3>Eylül Ayı Raporu</h3>
+                                    <div class="skills-top">
+                                        <h5>Yeni Kitaplar</h5>
+                                        <h4>45%</h4>
+                                        <div class="clearfix"></div>
+                                        <div class="skills">
+                                            <div class="skill" style="width:45%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skills-top">
+                                        <h5>Ödünç Alınan Kitaplar</h5>
+                                        <h4>68%</h4>
+                                        <div class="clearfix"></div>
+                                        <div class="skills">
+                                            <div class="skill1" style="width:68%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="skills-top">
+                                        <h5>Yeni Üyeler</h5>
+                                        <h4>89%</h4>
+                                        <div class="clearfix"></div>
+                                        <div class="skills">
+                                            <div class="skill2" style="width:89%"></div>
+                                        </div>
+                                    </div>
+                                    <p><b>MURAT YÜCEDAĞ</b> TARAFINDAN HAZIRLANAN <b class="text-uppercase">Mvc5 ile 3 Panelli Kütüphane Yönetim Sistemi </b> EĞİTİMİ TAKİP EDİLEREK HAZIRLANMIŞTIR..</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12 weather weatherwidget">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a class="weatherwidget-io" href="https://forecast7.com/tr/41d0128d98/istanbul/" data-label_1="İSTANBUL" data-label_2="HAVA DURUMU" data-theme="original">İSTANBUL HAVA DURUMU</a>
+                                <script>
+                                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                                </script>
+                            </div>
+                            <div class="col-sm-6 weatherwidget">
+                                <a class="weatherwidget-io" href="https://forecast7.com/tr/40d1929d06/bursa/" data-label_1="BURSA" data-label_2="HAVA DURUMU" data-theme="original">BURSA HAVA DURUMU</a>
+                                <script>
+                                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                                </script>
+                            </div>
+                            <div class="col-sm-6 weatherwidget">
+                                <a class="weatherwidget-io" href="https://forecast7.com/tr/39d9332d86/ankara/" data-label_1="ANKARA" data-label_2="HAVA DURUMU" data-theme="original">ANKARA HAVA DURUMU</a>
+                                <script>
+                                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                                </script>
+                            </div>
+                            <div class="col-sm-6 weatherwidget">
+                                <a class="weatherwidget-io" href="https://forecast7.com/tr/38d4227d14/izmir/" data-label_1="İZMIR" data-label_2="HAVA DURUMU" data-theme="original">İZMIR HAVA DURUMU</a>
+                                <script>
+                                    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

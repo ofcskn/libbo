@@ -1,0 +1,36 @@
+﻿@inject IUnitOfWork _uow
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        @if (_uow.Admin.GetTypeByAdmin == "admin")
+        {
+            <h3 class="header-main"><span>VİTRİN</span> PANEL</h3>
+            <h4 class="header-text">OFCSKN</h4>
+        }
+        else
+        {
+            <h3 class="header-main"><span>VİTRİN</span> PANEL</h3>
+        }
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#header" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-circle"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="header">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link dropdown-toggle"><i class="fa fa-ring"></i>Bildirim</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Setting" asp-action="Index" class="nav-link">Ayarlar</a>
+                </li>
+                <li class="log-out-item nav-item">
+                    <a asp-controller="home" asp-action="logout" class="log-out-link nav-link">Çıkış Yap</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

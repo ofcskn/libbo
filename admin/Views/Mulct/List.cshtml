@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MulctView>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>CEZA LİSTESİ</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <table class="table table-striped table-advance table-hover table-responsive-xl">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Üye Id</th>
+                                <th>Para Miktarı</th>
+                                <th>Süreç Id</th>
+                                
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mulct in Model)
+                            {
+                                @if (mulct.Money > 0)
+                                {
+                                    <tr>
+                                        <td>@mulct.Id</td>
+                                        <td>@mulct.Name @mulct.Surname</td>
+
+                                        <td>@mulct.Money</td>
+                                        <td>@mulct.ProcessId</td>
+                                        
+                                        <td>
+                                            <a asp-controller="mulct" asp-action="delete" asp-route-id="@mulct.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

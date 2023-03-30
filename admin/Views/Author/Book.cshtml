@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Book>
+
+@{
+    ViewData["Title"] = "Book";
+}
+@section style{
+    <style>
+        .book-box{
+            padding:20px 50px;
+        }
+        .book-image
+        {
+            width: 100%;
+            height: auto;
+        }
+        .book-overlay{
+            margin:25px 0; 
+        }
+            .book-overlay h4{
+                text-align:center;
+            }
+            .book-overlay p span
+            {
+                color: #3b3b3b;
+                font-weight:500;
+            }
+            .book-overlay p
+            {
+                color: #808080;
+                font-weight: 400;
+            }
+    </style>
+}
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Yazarın Kitapları </h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    @if (Model.Count() > 0)
+                    {
+                        <div class="book-section">
+                            <div class="row">
+                                @foreach (var book in Model)
+                                {
+                                    <div class="col-xl-3 col-md-4 col-sm-6 book-box">
+                                        <img class="book-image" src="/img/book/@book.Image" />
+                                        <div class="book-overlay">
+                                            <h4>@book.Name</h4>
+                                            <hr />
+                                            <p><span>Sayfa No: </span>@book.PageNo sayfa</p>
+                                            <p><span>Basım Yılı: </span>@book.PrintingYear</p>
+                                            <p><span>Okunma Sayısı: </span>@book.ReadCount</p>
+                                            <p><span>Skor: </span>@book.Score /5</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <a asp-controller="Author" asp-action="List" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-arrow-circle-left "></i>Geri Dön</a>
+
+                    }
+                    else
+                    {
+                        <p class="text-black-50">Herhangi bir sonuca ulaşamadık. Lütfen bir şeyler ekleyin. <i class="fa fa-history"></i></p>
+                        <a asp-controller="Author" asp-action="List" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-arrow-circle-left "></i>Geri Dön</a>
+                    }
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

@@ -1,0 +1,72 @@
+﻿
+/* ---------------------------------------------------
+    DEFAULT PROPERTIES
+
+    color: #01adb8;
+    color:hover:#00767e;
+    color:active: #01adb8;
+----------------------------------------------------- */
+
+
+/* ---------------------------------------------------
+    LOGİN STYLE
+----------------------------------------------------- */
+#login .content .login-form .login-button
+{
+    background: #01adb8;
+}
+/* ---------------------------------------------------
+    NAVBAR STYLE
+----------------------------------------------------- */
+.navbar .log-out-item .log-out-link
+{
+    background-color: #01adb8; /*Page sidebar color*/
+    color: #fff;
+    border-radius: 10px;
+    padding:10px 20px;
+}
+
+    #sidebar
+    {
+        background: #01adb8;
+    }
+    #sidebar ul.components .log-out-item .log-out-link{
+        background:#fff;
+        color:#01adb8;
+    }
+        #sidebar ul.components .log-out-item .log-out-link i
+        {
+            color: #01adb8;
+        }
+    .navbar .header-main span
+    {
+        color: #01adb8;
+    }
+
+
+    #sidebar ul li a:hover
+    {
+        color: #ffffff;
+        background: #00767e;
+    }
+
+    #sidebar ul li.active > a, a[aria-expanded="true"]
+    {
+        color: #fff;
+        background: #006f76;
+    }
+
+ul ul a
+{
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #01adb8;
+}
+.header-text{
+    font-size:18px!important;
+    margin-left:10px;
+    margin-top:15px;
+}
+.content-title{
+    text-transform:uppercase;
+}

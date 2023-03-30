@@ -1,0 +1,277 @@
+﻿@model SettingViewModel
+@inject IUnitOfWork _uow
+
+@{
+    ViewData["Title"] = "Manage";
+}
+
+@section style{
+    <style>
+        .form-title
+        {
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #b0b0b0;
+        }
+
+        .form-alert-text
+        {
+            color: #d50000;
+            font-weight: 400;
+            margin: 5px 0;
+        }
+
+        .detail-img
+        {
+            height: 200px;
+            width: 200px;
+            object-fit: cover;
+        }
+    </style>
+}
+@section script{
+    <script>
+        $(document).ready(function () {
+            var $phone = $('input[name = "Phone"]');
+
+            $phone.val("(" + $phone.val().toString().substring(0, 3) + ')' + " " + $phone.val().toString().substring(3, 6) + "-" + $phone.val().toString().substring(6, 8) + "-" + $phone.val().toString().substring(8, 10));
+        });
+        5531843454
+        $('input[name = "Phone"]').keydown(function (e) {
+            var key = e.which || e.charCode || e.keyCode || 0;
+            $phone = $(this);
+            console.log(key);
+            console.log($phone.val().length)
+
+            // Don't let them remove the starting '('
+            if ($phone.val().length === 1 && (key === 8 || key === 46)) {
+                console.log(key);
+                $phone.val('(');
+                return false;
+            }
+
+            // Reset if they highlight and type over first char.
+            else if ($phone.val().charAt(0) !== '(') {
+                $phone.val('(' + $phone.val());
+            }
+
+            // Auto-format- do not expose the mask as the user begins to type
+            if (key !== 8 && key !== 9) {
+
+                if ($phone.val().length === 4) {
+                    $phone.val($phone.val() + ')');
+                }
+                if ($phone.val().length === 5) {
+                    $phone.val($phone.val() + ' ');
+                }
+                if ($phone.val().length === 9) {
+                    $phone.val($phone.val() + '-');
+                }
+                if ($phone.val().length === 12) {
+                    $phone.val($phone.val() + '-');
+                }
+            }
+
+            // Allow numeric (and tab, backspace, delete) keys only
+            return (key == 8 ||
+                key == 9 ||
+                key == 46 ||
+                (key >= 48 && key <= 57) ||
+                (key >= 96 && key <= 105));
+        })
+
+            .bind('focus click', function () {
+                $phone = $(this);
+
+                if ($phone.val().length === 0) {
+                    $phone.val('(');
+                }
+                else {
+                    var val = $phone.val();
+                    $phone.val('').val(val); // Ensure cursor remains at the end
+                }
+            })
+
+            .blur(function () {
+                $phone = $(this);
+
+                if ($phone.val() === '(') {
+                    $phone.val('');
+                }
+            });
+
+    </script>
+}
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+
+        @if (_uow.Member.GetTypeByMember == "admin")
+        {
+            <h3 class="mb"><i class="fa fa-angle-right"></i> Yönetici Detayları </h3>
+        }
+        @if (_uow.Member.GetTypeByMember == "member")
+        {
+            <h3 class="mb"><i class="fa fa-angle-right"></i> Üye Detayları </h3>
+        }
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="form-panel">
+                        @if (_uow.Member.GetTypeByMember == "admin")
+                        {
+                            <form asp-controller="setting" asp-action="manage" class="form-horizontal style-form" enctype="multipart/form-data" method="post">
+                                <input type="hidden" asp-for="Admin.Id" />
+                                <input type="hidden" asp-for="Admin.Image" />
+                                <input type="hidden" asp-for="Admin.LastLoginDate" />
+                                <input type="hidden" asp-for="Admin.RegisterDate" />
+                                <input type="hidden" asp-for="Admin.Role" />
+                                <input type="hidden" asp-for="Admin.IsAdmin" />
+                                <h4 class="form-title">Kişisel Bilgiler</h4>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Name" class="col-sm-2 col-sm-2 control-label">Ad</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Admin.Name" type="text" class="form-control">
+                                        <span class="text-danger" asp-validation-for="Admin.Name"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Surname" class="col-sm-2 col-sm-2 control-label">Soyad</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Admin.Surname" type="text" class="form-control">
+                                        <span class="text-danger" asp-validation-for="Admin.Surname"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Email" class="col-sm-2 col-sm-2 control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Admin.Email" type="text" class="form-control">
+                                        <span class="text-danger" asp-validation-for="Admin.Email"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Phone" class="col-sm-2 col-sm-2 control-label">Telefon</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Admin.Phone" type="text" class="form-control">
+                                        <span class="text-danger" asp-validation-for="Admin.Phone"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Adress" class="col-sm-2 col-sm-2 control-label">Adres</label>
+                                    <div class="col-sm-10">
+                                        <textarea rows="5" asp-for="Admin.Adress" type="text" class="form-control"></textarea>
+                                        <span class="text-danger" asp-validation-for="Admin.Adress"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Image" class="col-sm-2 col-sm-2 control-label">Fotoğraf</label>
+                                    <div class="col-sm-10">
+                                        <img src="~/img/@Model.Admin.Image" class="detail-img" />
+                                        <input asp-for="Admin.Image" type="file" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="Admin.Image"></span>
+                                    </div>
+                                </div>
+                                <h4 class="form-title">Kullanıcı Bilgileri</h4>
+                                <div class="form-group">
+                                    <label asp-for="Admin.UserName" class="col-sm-2 col-sm-2 control-label">Kullanıcı Adı</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Admin.UserName" type="text" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="Admin.UserName"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Admin.Password" class="col-sm-2 col-sm-2 control-label">Kullanıcı Şifresi</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" asp-for="Admin.Password" value="@Model.Admin.Password" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="Admin.Password"></span>
+                                    </div>
+                                    <label class="col-sm-auto form-alert-text">Sisteme yukarıdaki kullanıcı adı ve şifre ile giriş yapılabilmektedir.</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-success" value="Gönder" />
+                                    <a asp-controller="setting" asp-action="index" class="btn btn-info">Ayarlara Dön</a>
+                                </div>
+                            </form>
+                        }
+                        @if (_uow.Member.GetTypeByMember == "member")
+                        {
+                    <form asp-controller="setting" asp-action="manage" class="form-horizontal style-form" enctype="multipart/form-data" method="post">
+                        <input type="hidden" asp-for="Member.Id" />
+                        <input type="hidden" asp-for="Member.EducationStatus" />
+                        <input type="hidden" asp-for="Member.TermConfirm" />
+                        <input type="hidden" asp-for="Member.Image" />
+                        <h4 class="form-title">Kişisel Bilgiler</h4>
+                        <div class="form-group">
+                            <label asp-for="Member.UserName" class="col-sm-2 col-sm-2 control-label">Kullanıcı Adı</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Member.UserName" type="text" class="font-weight-bold form-control" />
+                                <span class="text-danger" asp-validation-for="Member.UserName"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Name" class="col-sm-2 col-sm-2 control-label">Ad</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Member.Name" type="text" class="form-control" />
+                                <span class="text-danger" asp-validation-for="Member.Name"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Surname" class="col-sm-2 col-sm-2 control-label">Soyad</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Member.Surname" type="text" class="form-control" />
+                                <span class="text-danger" asp-validation-for="Member.Surname"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Mail" class="col-sm-2 col-sm-2 control-label">Mail</label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for="Member.Mail" class="form-control" />
+                                <span class="text-danger" asp-validation-for="Member.Mail"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Phone" class="col-sm-2 col-sm-2 control-label">Telefon</label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for="Member.Phone" placeholder="553 184 34 54" class="phone-mask form-control" />
+                                <span class="text-danger" asp-validation-for="Member.Phone"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.School" class="col-sm-2 col-sm-2 control-label">Okul</label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for="Member.School" class="form-control" />
+                                <span class="text-danger" asp-validation-for="Member.School"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Password" class="col-sm-2 col-sm-2 control-label">Şifre</label>
+                            <div class="col-sm-10">
+                                <input type="password" asp-for="Member.Password" value="@Model.Member.Password" class="form-control" />
+                                <span class="text-danger" asp-validation-for="Member.Password"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Member.Image" class="col-sm-2 col-sm-2 control-label">Fotoğraf</label>
+                            <div class="col-sm-10">
+                                <img src="~/upload/@Model.Member.Image" class="detail-img" />
+                                <input asp-for="Member.Image" type="file" class="form-control">
+                                <span class="text-danger" asp-validation-for="Member.Image"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success" value="Düzenle" />
+                            <a asp-controller="setting" asp-action="index" class="btn btn-info">Ayarlara Dön</a>
+                        </div>
+                    </form>
+                        }
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

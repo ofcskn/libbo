@@ -1,0 +1,593 @@
+﻿@model IEnumerable<MailMessage>
+
+@{
+    ViewData["Title"] = "List";
+    //var getAll = _uow.Message.GetAll();
+}
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Mesajlar</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <section class="panel">
+                                <header class="panel-heading wht-bg">
+                                    <form action="#" class="pull-right mail-src-position">
+                                        <div class="input-append">
+                                            <input type="text" class="form-control " placeholder="Search Mail">
+                                        </div>
+                                    </form>
+                                </header>
+                                <div class="panel-body minimal">
+                                    <div class="mail-option">
+                                        <div class="chk-all">
+                                            <div class="pull-left mail-checkbox">
+                                                <input type="checkbox" class="">
+                                            </div>
+                                            <div class="btn-group">
+                                                <a data-toggle="dropdown" href="#" class="btn mini all">
+                                                    All
+                                                    <i class="fa fa-angle-down "></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#"> None</a></li>
+                                                    <li><a href="#"> Read</a></li>
+                                                    <li><a href="#"> Unread</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
+                                                <i class=" fa fa-refresh"></i>
+                                            </a>
+                                        </div>
+                                        <div class="btn-group hidden-phone">
+                                            <a data-toggle="dropdown" href="#" class="btn mini blue">
+                                                More
+                                                <i class="fa fa-angle-down "></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
+                                                <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group">
+                                            <a data-toggle="dropdown" href="#" class="btn mini blue">
+                                                Move to
+                                                <i class="fa fa-angle-down "></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#"><i class="fa fa-pencil"></i> Mark as Read</a></li>
+                                                <li><a href="#"><i class="fa fa-ban"></i> Spam</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#"><i class="fa fa-trash-o"></i> Delete</a></li>
+                                            </ul>
+                                        </div>
+                                        <ul class="unstyled inbox-pagination">
+                                            <li><span>1-50 of 99</span></li>
+                                            <li>
+                                                <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                                            </li>
+                                            <li>
+                                                <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="table-inbox-wrap">
+                                        <table class="table table-inbox table-responsive-md mb-4">
+                                            <thead class="table-info">
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>Gönderen Mail</td>
+                                                    <td>Alıcı Mail</td>
+                                                    <td>Konu</td>
+                                                    <td>Tarih</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.Count() > 0)
+                                                {
+                                                    <tr class="unread">
+                                                        @foreach (var mail in Model)
+                                                        {
+                                                            <td class="inbox-small-cells">
+                                                                <input type="checkbox" class="mail-checkbox">
+                                                            </td>
+                                                            <td class="inbox-small-cells"><i class="fa fa-star"></i></td>
+                                                            <td class="view-message  dont-show"><a href="mail_view.html">@mail.SenderMail</a></td>
+                                                            <td class="view-message  dont-show"><a href="mail_view.html">@mail.ReceiverMail</a></td>
+                                                            <td class="view-message  dont-show"><a href="mail_view.html">@mail.Subject</a></td>
+                                                            <td class="view-message "><a href="mail_view.html">@mail.Date.ToShortDateString()</a></td>
+                                                            <td class="view-message  inbox-small-cells"><i class="fa fa-paperclip"></i></td>
+                                                        }
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="8" class="text-center">
+                                                            Gönderilmiş herhangi bir mesajınız yoktur.
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#sendMessageModal">
+                                            Mesaj Gönder
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Mesaj Gönder</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form asp-controller="Message" asp-action="SendMail" method="post">
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label class="col-form-label">Kime: </label>
+                                                                <input class="form-control" type="email" name="ReceiverMail" placeholder="Alıcı Mail" required />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-form-label">Konu: </label>
+                                                                <input class="form-control" type="text" name="Subject" placeholder="Konu" required />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-form-label">Mesajınız: </label>
+                                                                <textarea rows="6" class="form-control" type="text" name="Detail" placeholder="Mesajınız"></textarea>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                                            <input type="submit" class="btn btn-primary" value="Gönder" />
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->
+@section style{
+    <style>
+        .inbox-pagination
+        {
+            list-style: none;
+            text-align: center;
+        }
+
+            .inbox-pagination li
+            {
+                margin: 0 6px;
+            }
+        /* MAIL CONFIGURATION - INBOX, MAIL COMPOSE & MAIL VIEW  */
+        .mail-nav
+        {
+            margin: 15px -15px 0 -15px;
+        }
+
+            .mail-nav li a
+            {
+                border-radius: 0;
+                -webkit-border-radius: 0;
+                border-top: 1px solid #f2f3f6;
+                padding: 15px;
+                border-right: 3px solid rgba(0,0,0,0);
+                color: #a2a2a2;
+            }
+
+            .mail-nav > li > a:hover, .mail-nav > li > a:focus
+            {
+                background: #fafafa;
+                color: #4ECDC4;
+                border-right: 3px solid #1fb5ad;
+            }
+
+            .mail-nav > li.active > a, .mail-nav > li.active > a:hover, .mail-nav > li.active > a:focus
+            {
+                background: #fafafa;
+                color: #4ECDC4;
+                border-right: 3px solid #4ECDC4;
+            }
+
+            .mail-nav > li + li
+            {
+                margin-left: 0;
+                margin-top: 0px;
+            }
+
+            .mail-nav i
+            {
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+        .inbox-notification
+        {
+            margin-top: -2px;
+        }
+
+        .user-head .inbox-avatar
+        {
+            width: 65px;
+            float: left;
+        }
+
+            .user-head .inbox-avatar img
+            {
+                border-radius: 4px;
+                -webkit-border-radius: 4px;
+            }
+
+        .user-head .user-name
+        {
+            display: inline-block;
+            margin: 0 0 0 10px;
+        }
+
+            .user-head .user-name h5
+            {
+                font-size: 14px;
+                margin-top: 15px;
+                margin-bottom: 0;
+                font-weight: 300;
+            }
+
+                .user-head .user-name h5 a
+                {
+                    color: #fff;
+                }
+
+            .user-head .user-name span a
+            {
+                font-size: 12px;
+                color: #87e2e7;
+            }
+
+        a.mail-dropdown
+        {
+            background: #80d3d9;
+            padding: 3px 5px;
+            font-size: 10px;
+            color: #01a7b3;
+            border-radius: 2px;
+            margin-top: 20px;
+        }
+
+        .inbox-body
+        {
+            padding: 20px;
+        }
+
+        .btn-compose
+        {
+            background: #4ECDC4;
+            padding: 12px 0;
+            text-align: center;
+            width: 100%;
+            color: #fff;
+        }
+
+            .btn-compose:hover, .btn-compose:focus
+            {
+                background: #1ca59e;
+                color: #fff;
+            }
+
+            .btn-compose i
+            {
+                padding: 5px;
+            }
+
+        ul.inbox-nav
+        {
+            display: inline-block;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .inbox-divider
+        {
+            border-bottom: 1px solid #d5d8df;
+        }
+
+        .inbox-action
+        {
+            margin-top: 50px;
+        }
+
+        .src-position
+        {
+            margin-top: -7px;
+        }
+
+        .mail-src-position
+        {
+            margin-top: -3px;
+        }
+
+        ul.labels-info
+        {
+            border-bottom: 1px solid #f1f2f7;
+            margin-bottom: 10px;
+        }
+
+        ul.inbox-nav li
+        {
+            display: inline-block;
+            line-height: 45px;
+            width: 100%;
+        }
+
+            ul.inbox-nav li a
+            {
+                color: #6a6a6a;
+                line-height: 45px;
+                width: 100%;
+                display: inline-block;
+                padding: 0 20px;
+            }
+
+                ul.inbox-nav li a:hover, ul.inbox-nav li.active a, ul.inbox-nav li a:focus
+                {
+                    color: #6a6a6a;
+                    background: #d5d7de;
+                }
+
+                ul.inbox-nav li a i
+                {
+                    padding-right: 10px;
+                    font-size: 16px;
+                    color: #6a6a6a;
+                }
+
+                ul.inbox-nav li a span.label
+                {
+                    margin-top: 13px;
+                }
+
+        ul.labels-info li h4
+        {
+            padding-top: 5px;
+            color: #5c5c5e;
+            font-size: 15px;
+            text-transform: uppercase;
+        }
+
+        ul.labels-info li
+        {
+            margin: 0;
+        }
+
+            ul.labels-info li a
+            {
+                color: #6a6a6a;
+                border-radius: 0;
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+                ul.labels-info li a:hover, ul.labels-info li a:focus
+                {
+                    color: #6a6a6a;
+                    background: none;
+                }
+
+            ul.labels-info li img
+            {
+                margin-right: 10px;
+            }
+
+        .nav.nav-pills.nav-stacked.labels-info p
+        {
+            margin-bottom: 0;
+            padding: 0 22px;
+            color: #9d9f9e;
+            font-size: 11px;
+        }
+
+        .inbox-head
+        {
+            padding: 20px;
+            background: #41cac0;
+            color: #fff;
+            border-radius: 0 4px 0 0;
+            -webkit-border-radius: 0 4px 0 0;
+            min-height: 80px;
+        }
+
+            .inbox-head h3
+            {
+                margin: 0;
+                display: inline-block;
+                padding-top: 6px;
+                font-weight: 300;
+            }
+
+            .inbox-head .sr-input
+            {
+                height: 40px;
+                border: none;
+                box-shadow: none;
+                padding: 0 10px;
+                float: left;
+                border-radius: 4px 0 0 4px;
+                color: #8a8a8a;
+            }
+
+            .inbox-head .sr-btn
+            {
+                height: 40px;
+                border: none;
+                background: #00a6b2;
+                color: #fff;
+                padding: 0 20px;
+                border-radius: 0 4px 4px 0;
+                -webkit-border-radius: 0 4px 4px 0;
+            }
+
+        .wht-bg
+        {
+            background: #fff;
+        }
+
+            .wht-bg h4
+            {
+                font-size: 24px;
+                color: #a2a2a2;
+                font-weight: 300;
+            }
+
+        .table-inbox-wrap
+        {
+            margin: 0 -15px;
+        }
+
+        .mail-checkbox
+        {
+            margin-right: 10px;
+        }
+
+        .table-inbox
+        {
+            margin: 0;
+        }
+
+            .table-inbox tr td
+            {
+                padding: 12px !important;
+            }
+
+                .table-inbox tr td:first-child
+                {
+                    width: 5%;
+                }
+
+                    .table-inbox tr td:first-child .icheckbox_minimal
+                    {
+                        margin-left: 15px;
+                    }
+
+                .table-inbox tr td:hover
+                {
+                    cursor: pointer;
+                }
+
+                .table-inbox tr td .fa-star.inbox-started, .table-inbox tr td .fa-star:hover
+                {
+                    color: #f78a09;
+                }
+
+                .table-inbox tr td .fa-star
+                {
+                    color: #d5d5d5;
+                }
+
+            .table-inbox tr.unread td
+            {
+                font-weight: 600;
+                background: #f7f7f7;
+            }
+
+            .table-inbox tr.unread a
+            {
+                color: #32323a;
+            }
+
+            .table-inbox tr a
+            {
+                color: #767676;
+            }
+
+        ul.inbox-pagination
+        {
+            float: right;
+        }
+
+            ul.inbox-pagination li
+            {
+                float: left;
+            }
+
+        .pagination li a
+        {
+            color: #32323a;
+        }
+
+        .mail-option
+        {
+            display: inline-block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+            .mail-option .chk-all
+            {
+                float: left;
+            }
+
+            .mail-option .chk-all, .mail-option .btn-group
+            {
+                margin-right: 5px;
+            }
+
+                .mail-option .chk-all, .mail-option .btn-group a.btn
+                {
+                    border: 1px solid #e7e7e7;
+                    padding: 5px 10px;
+                    display: inline-block;
+                    background: #fcfcfc;
+                    color: #afafaf;
+                    border-radius: 3px !important;
+                    -webkit-border-radius: 3px !important;
+                }
+
+        .inbox-pagination a.np-btn
+        {
+            border: 1px solid #e7e7e7;
+            padding: 5px 15px;
+            display: inline-block;
+            background: #fcfcfc;
+            color: #afafaf;
+            border-radius: 3px !important;
+            -webkit-border-radius: 3px !important;
+        }
+
+        .mail-option .chk-all input[type=checkbox]
+        {
+            margin-top: 0;
+        }
+
+        .mail-option .btn-group a.all
+        {
+            padding: 0;
+            border: none;
+        }
+    </style>
+}

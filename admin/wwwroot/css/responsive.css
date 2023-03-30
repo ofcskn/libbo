@@ -1,0 +1,37 @@
+﻿@media only screen and (min-width: 1200px)
+{
+   
+}
+@media only screen and (max-width: 1200px)
+{
+  
+}
+@media only screen and (max-width: 992)
+{
+   
+}
+@media only screen and (max-width: 768px)
+{
+    .my-section
+    {
+        margin:15px;
+    }
+  
+}
+@media only screen and (max-width: 576px)
+{
+    .my-section
+    {
+        margin:0;
+        padding:20px 5px;
+    }
+    .my-section .my-wrapper .content-title{
+        padding:0 15px;
+    }
+    #content #main
+    {
+        padding: 10px;
+    }
+    
+
+}

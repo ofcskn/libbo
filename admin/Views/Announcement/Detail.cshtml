@@ -1,0 +1,102 @@
+﻿@model Announcement
+@inject IUnitOfWork _uow
+@{
+    ViewData["Title"] = "List";
+}
+@section script{
+    <script>
+        var deleteBtn = $('#deleteBtn');
+
+        deleteBtn.on("click", function () {
+
+            var id = $(this).data("id");
+            var formData = new FormData();
+            formData.append("id", id);
+            $.ajax({
+                url: "/admin/announcement/delete",
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function () {
+                    window.location.href = "/admin/announcement/list"
+                }
+            });
+
+        });
+    </script>
+}
+
+@section style{
+    <style>
+        .anouncement-section
+        {
+            padding: 20px 20px;
+        }
+
+        .anouncement-content
+        {
+            margin: 20px 0;
+        }
+
+            .anouncement-content p
+            {
+                color: #000000;
+                text-align: justify;
+                font-weight: 300;
+            }
+
+            .anouncement-content .announcement-info
+            {
+                margin: 40px 0;
+            }
+
+                .anouncement-content .announcement-info span
+                {
+                    padding: 10px 20px;
+                    background: #01adb8;
+                    border-radius: 10px;
+                    color: #fff;
+                    font-weight: 500;
+                    margin-right: 10px;
+                }
+    </style>
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Duyuru Detayı</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <form asp-controller="Announcement" asp-action="Detail" method="get">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="anouncement-section">
+                            <h2 class="anouncement-title">@Model.Title</h2>
+                            <div class="anouncement-content">
+                                <p>@Model.SubTitle</p>
+                                <p>@Model.Description</p>
+                                <div class=" announcement-info">
+                                    <span class="date">@Model.Date</span>
+                                    <span class="read-number">@Model.ReadNumber görüntülenme</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a asp-controller="announcement" asp-action="list" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-arrow-left "></i>  Geri Dön</a>
+                        @if (_uow.Admin.GetTypeByAdmin == "admin")
+                        {
+                            <button id="deleteBtn" data-id="@Model.Id" type="button" class="list-create-btn btn btn-danger btn-xs ml-2"><i class="fa fa-trash "></i></button>
+                        }
+                    </form>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

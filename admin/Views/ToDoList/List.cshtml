@@ -1,0 +1,290 @@
+﻿@model PaginatedList<ToDoList>
+
+@{
+    ViewData["Title"] = "List";
+}
+@section style{
+    <style>
+        .td-status
+        {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-status
+        {
+            color: #fff !important;
+        }
+
+        .checkedToDo
+        {
+            background-color: #ff6a00;
+        }
+
+        .checkedText
+        {
+            text-decoration: line-through;
+        }
+
+        .toDoText
+        {
+            display: flex;
+        }
+
+        .toDoAlert
+        {
+            margin-bottom: 20px 0;
+        }
+
+            .toDoAlert p
+            {
+                font-size: 18px;
+                font-weight: 200;
+                line-height: 1.2;
+                color: #000000;
+            }
+
+        .updateInput:focus
+        {
+            color: #495057;
+            background-color: #fff;
+            border-color: #01adb8;
+            outline: 0;
+            box-shadow: 0 0 0 .2rem rgba(1, 173, 184, 0.62);
+        }
+    </style>
+}
+@section script{
+    <script>
+        $(document).ready(function () {
+            var addToDo = $('#addToDo');
+            var checkbox = $('.checkToDo');
+            var deleteToDoBtn = $('.deleteToDoBtn');
+
+            var toDoAlert = $('.toDoAlert');
+            toDoAlert.hide();
+
+            checkbox.on('click', function () {
+                var id = $(this).data("id");
+                var toDoText = $('.toDoText').filter('[data-id="' + id + '"]');
+                var toDoItem = $('.to-do-item').filter('[data-id="' + id + '"]');
+
+                var formData = new FormData();
+                formData.append("id", id);
+                $.ajax({
+                    url: "/admin/ToDoList/Check",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (checkbox.filter('[data-id="' + id + '"]').prop("checked") == true) {
+                            setTimeout(function () { toDoText.addClass("checkedText").fadeIn(200); }, 0);
+                            setTimeout(function () { toDoItem.hide().fadeOut(500); }, 1000);
+                            
+                        }
+                        else {
+                            toDoText.removeClass("checkedText").fadeIn(200);
+                        }
+                    }
+                });
+            });
+
+            var add = function () {
+                var toDo = $('#toDoText').val();
+
+                var formData = new FormData();
+                console.log(toDo);
+                formData.append("todo", toDo);
+                $.ajax({
+                    url: "/admin/ToDoList/Add",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        setTimeout(function () { toDoAlert.addClass("alert-success"); toDoAlert.append("<p>Hedefiniz başarıyla eklendi.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                        setTimeout(function () { window.location.reload(); }, 1000);
+                    },
+                    error: function (data) {
+                        setTimeout(function () { toDoAlert.addClass("alert-danger"); toDoAlert.append("<p>Hedefiniz eklenirken bir sorun oluştu. Lütfen sonra tekrar deneyiniz.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                        setTimeout(function () { window.location.reload(); }, 1000);
+                    }
+                });
+            }
+            addToDo.on('click', function () {
+                add();
+            });
+            $('#toDoText').on('keyup', function (e) {
+                if (e.keyCode == 13) {
+                    add();
+                }
+            });
+
+
+            deleteToDoBtn.on('click', function () {
+                var id = $(this).data("id");
+                alert(id);
+                var formData = new FormData();
+                formData.append("id", id);
+                $.ajax({
+                    url: "/admin/ToDoList/Delete",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        console.log(data);
+                        setTimeout(function () { toDoAlert.addClass("alert-success"); toDoAlert.append("<p>Hedefiniz başarıyla silindi.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                        setTimeout(function () { window.location.reload(); }, 1500);
+                    },
+                    error: function (data) {
+                        setTimeout(function () { toDoAlert.addClass("alert-danger"); toDoAlert.append("<p>Hedefiniz slinirken bir sorun oluştu. Lütfen sonra tekrar deneyiniz.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                        setTimeout(function () { window.location.reload(); }, 1500);
+                    }
+                });
+            });
+
+            $('body').on('click', '[data-editable]', function () {
+
+                var $el = $(this);
+
+                var $input = $('<input class="updateInput form-control"/>').val($el.text());
+                $el.replaceWith($input);
+
+                var save = function () {
+                    var $p = $('<td data-editable />').text($input.val());
+                    $input.replaceWith($p);
+
+                    var id = $el.data("id");
+                    var formData = new FormData();
+                    formData.append("id", id);
+                    formData.append("goal", $input.val());
+
+                    $.ajax({
+                        url: "/admin/ToDoList/Update",
+                        type: "POST",
+                        data: formData,
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+                            setTimeout(function () { toDoAlert.addClass("alert-success"); toDoAlert.append("<p>Hedefiniz başarıyla güncellendi.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                            setTimeout(function () { window.location.reload(); }, 1500);
+                        },
+                        error: function () {
+                            setTimeout(function () { toDoAlert.addClass("alert-danger"); toDoAlert.append("<p>Hedefiniz güncellenirken bir sorun oluştu. Lütfen sonra tekrar deneyiniz.</p>"); toDoAlert.show().fadeIn(200); }, 300);
+                            setTimeout(function () { window.location.reload(); }, 1500);
+                        }
+                    });
+                };
+                /**
+                  We're defining the callback with `one`, because we know that
+                  the element will be gone just after that, and we don't want
+                  any callbacks leftovers take memory.
+                  Next time `p` turns into `input` this single callback
+                  will be applied again.
+                */
+                $input.on("keyup", function (e) {
+                    if (e.keyCode == 13) {
+                        save();
+                    }
+                });
+            });
+        });
+    </script>
+}
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Yapılacaklar Listesi</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12 mb-3">
+                <div class=" float-right">
+                    @{
+                        var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+                        var nextDisabled = !Model.NextPage ? "disabled" : "";
+                    }
+                    <a asp-action="List" asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="btn btn-dark @prevDisabled">Geri</a>
+                    <a asp-action="List" asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="btn btn-dark @nextDisabled">İleri</a>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-success toDoAlert" role="alert">
+                    <p></p>
+                </div>
+                <div class="content-panel">
+                    @if (Model.Count() > 0)
+                    {
+                        <table class="table table-advance table-hover table-responsive-xl">
+                            <thead class="table-info">
+                                <tr>
+                                    <th></th>
+                                    <th>Id</th>
+                                    <th>Hedefim</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var todolist in Model)
+                                {
+                                    <tr class="to-do-item" data-id="@todolist.Id">
+                                        <td>
+                                            <input data-id="@todolist.Id" type="checkbox" value=""  @(Convert.ToBoolean(todolist.Enabled) ? "checked" : string.Empty) class="checkToDo checkbox" />
+                                        </td>
+                                        <td>@todolist.Id</td>
+                                        <td class="toDoText" data-editable data-id="@todolist.Id">@todolist.Goal</td>
+                                        @if (todolist.Enabled == true)
+                                        {
+                                            <td>
+                                                Yapıldı
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td>Yapılmadı</td>
+                                        }
+                                        <td>
+                                            <a href="javascript:;" data-id="@todolist.Id" class="deleteToDoBtn btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group row my-3 mx-0 ">
+                                    <input id="toDoText" type="text" class="col-sm-10 form-control" placeholder="Kendinize hedef belirleyin." />
+                                    <div class="col-sm-2">
+                                        <a id="addToDo" href="javascript:;" class="list-create-btn btn btn-info w-100 "><i class="fa fa-plus "></i>EKLE</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-black-50">Herhangi bir sonuca ulaşamadık. Lütfen bir şeyler ekleyin. <i class="fa fa-history"></i></p>
+                        <a asp-controller="todolist" asp-action="manage" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-plus "></i>EKLE</a>
+                    }
+                </div>
+
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

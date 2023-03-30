@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- revolution slider css -->
+    <link rel="stylesheet" type="text/css" href="~/revolution/css/settings.css" />
+    <link rel="stylesheet" type="text/css" href="~/revolution/css/layers.css" />
+    <link rel="stylesheet" type="text/css" href="~/revolution/css/navigation.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link href="~/css/default.css" rel="stylesheet" />
+    <link href="~/css/responsive.css" rel="stylesheet" />
+
+    @RenderSection("style", required: false)
+</head>
+<body>
+    <div class="wrapper">
+        <partial name="_SideBar" />
+        <div id="content">
+            <partial name="_Header" />
+            <div id="main">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    <!-- revolution js files -->
+    <script src="~/revolution/js/jquery.themepunch.tools.min.js"></script>
+    <script src="~/revolution/js/jquery.themepunch.revolution.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.actions.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.carousel.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.migration.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
+    <script src="~/revolution/js/extensions/revolution.extension.video.min.js"></script>
+    @RenderSection("script", required: false)
+</body>
+</html>

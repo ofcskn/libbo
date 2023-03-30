@@ -1,0 +1,97 @@
+﻿@model Member
+
+@{
+    ViewData["Title"] = "Manage";
+}
+@section style{
+    <style>
+        .form-title
+        {
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #b0b0b0;
+        }
+
+        .form-alert-text
+        {
+            color: #d50000;
+            font-weight: 400;
+            margin: 5px 0;
+        }
+
+        .detail-img
+        {
+            height: 200px;
+            width: 200px;
+            object-fit: cover;
+        }
+    </style>
+}
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="mb"><i class="fa fa-angle-right"></i> Üye Detayları </h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="form-panel">
+                        <form asp-controller="member" asp-action="manage" class="form-horizontal style-form" enctype="multipart/form-data" method="get">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="EducationStatus" />
+                            <input type="hidden" asp-for="TermConfirm" />
+                            <input type="hidden" name="School" value="@Model.Image" />
+                            <h4 class="form-title">Kişisel Bilgiler</h4>
+                            <div class="form-group">
+                                <label asp-for="UserName" class="col-sm-2 col-sm-2 control-label">Kullanıcı Adı</label>
+                                <div class="col-sm-10">
+                                    <input value="---> @Model.UserName" type="text" class="font-weight-bold form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="col-sm-2 col-sm-2 control-label">Ad</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="Name" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Surname" class="col-sm-2 col-sm-2 control-label">Soyad</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="Surname" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Phone" class="col-sm-2 col-sm-2 control-label">Telefon</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="Phone" type="text" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Mail" class="col-sm-2 col-sm-2 control-label">Adres</label>
+                                <div class="col-sm-10">
+                                    <input type="text" asp-for="Mail" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Image" class="col-sm-2 col-sm-2 control-label">Fotoğraf</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="Image" type="file" class="form-control" />
+                                    <img src="~/img/@Model.Image" class="detail-img" />
+                                    <span class="text-danger" asp-validation-for="Image"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <a asp-controller="member" asp-action="delete" asp-route-id="@Model.Id" class="btn btn-danger">Sil</a>
+                                <a asp-controller="member" asp-action="list" class="btn btn-info">Listeye Dön</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

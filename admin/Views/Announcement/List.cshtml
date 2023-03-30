@@ -1,0 +1,160 @@
+﻿@model IEnumerable<Announcement>
+@inject IUnitOfWork _uow
+@{
+    ViewData["Title"] = "List";
+}
+@section script{
+    <script>
+        $(document).ready(function () {
+            var deleteBtn = $('#deleteBtn');
+            var announcementTitle = $('.announcement-title');
+
+            deleteBtn.on("click", function () {
+
+                var id = $(this).data("id");
+                var formData = new FormData();
+                formData.append("id", id);
+                $.ajax({
+                    url: "/admin/announcement/delete",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data == "yes") {
+                            setTimeout(function () { window.location.href = "/admin/announcement/list" }, 1500);
+                        }  
+                    }
+                });
+            });
+            announcementTitle.on("click", function () {
+                var id = $(this).data("id");
+                var formData = new FormData();
+                formData.append("id", id);
+                $.ajax({
+                    url: "/admin/announcement/readCount",
+                    type: "POST",
+                    data: formData,
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function () {
+                    }
+                });
+            });
+
+
+
+        });
+   
+    </script>
+}
+
+@section style{
+    <style>
+        .announcement-section
+        {
+        }
+
+        .announcement-box
+        {
+            position: relative;
+            padding: 30px;
+            background: #fff68f;
+        }
+
+        .announcement-content
+        {
+            margin-top: 20px 0px;
+        }
+
+            .announcement-content .announcement-text
+            {
+                margin: 20px 0;
+            }
+
+            .announcement-content .announcement-info .date
+            {
+                font-weight: 500;
+            }
+
+            .announcement-content .announcement-info .read-number
+            {
+                float: right;
+            }
+
+        .announcement-action
+        {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+            .announcement-action .anncouncement-menu
+            {
+                transform: translate3d(-70px, 40px, 0) !important;
+                text-align: right;
+                padding: 10px;
+                min-width: 0;
+            }
+            
+    </style>
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>Duyurular</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="row">
+                        @foreach (var announcement in Model)
+                        {
+                            <div class="announcement-section col-xl-4 col-sm-6">
+                                <div class="announcement-box">
+                                    <div class="announcement-action">
+                                        <div class="dropdown">
+                                            <button class="btn btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-bars"></i>
+                                            </button>
+                                            <div class="dropdown-menu anncouncement-menu" aria-labelledby="dropdownMenuButton">
+                                                @if (_uow.Admin.GetTypeByAdmin == "admin")
+                                                {
+                                                    <a asp-controller="announcement" asp-action="manage" asp-route-id="@announcement.Id"><i class="fa fa-pencil btn btn-secondary"></i></a>
+                                                    <a href="javascript:;" id="deleteBtn" data-id="@announcement.Id" ><i class="fa fa-trash btn btn-danger"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-controller="announcement" asp-action="delete" class="dropdown-item"><i class="fa fa-check"></i> Okudum</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a asp-controller="Announcement" asp-action="Detail" asp-route-id="@announcement.Id" class="announcement-title" data-id="@announcement.Id">
+                                        <h3 class="text-uppercase">@announcement.Title</h3>
+                                    </a>
+                                    <div class="announcement-content">
+                                        <div class="text-justify announcement-text">
+                                            @announcement.Description.Substring(0, announcement.Description.IndexOf('.')) ...
+                                        </div>
+                                        <div class=" announcement-info row">
+                                            <span class="date col-xl-6 col-sm-12">@announcement.Date</span>
+                                            <span class="read-number col-xl-6 col-sm-12">@announcement.ReadNumber görüntülenme</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

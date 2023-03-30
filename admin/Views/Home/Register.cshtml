@@ -1,0 +1,124 @@
+﻿@model Member
+
+@{
+    Layout = null;
+}
+
+
+<!--A Design by W3layouts
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Course Register Form a Flat Responsive Widget Template :: w3layouts</title>
+    <!-- custom-theme -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Course Register Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript">
+        addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+               function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //custom-theme -->
+    <!-- css files -->
+    <link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;subset=devanagari,latin-ext" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
+    <link href="~/css/register.css" type="text/css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- //css files -->
+
+    <link rel="stylesheet" href="css/font-awesome.css"> <!-- Font-Awesome-Icons-CSS -->
+
+</head>
+<!-- body starts -->
+<body>
+    <!-- section -->
+    <section class="register">
+        <div class="register-full">
+            <div class="register-left">
+                <div class="register">
+                    <div class="logo">
+                        <a href="#"><span class="fa fa-graduation-cap" aria-hidden="true"></span></a>
+                    </div>
+                    <h1>Kütüphanemize Kayıt ol</h1>
+                    <p>
+                        <b>Murat Yücedağ</b> tarafından hazırlanan Mvc 5 İle Panelli Kütüphane Yönetim Sistemi kursu takip edilerek oluşturulmuştur.
+                    </p>
+                    <div class="content3">
+                        <ul>
+                            <li><a class="" href="/#about"> Biz Kimiz</a></li>
+                            <li><a class="read" asp-controller="Home" asp-action="Login"> Giriş Yap</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="register-right">
+                <div class="register-in">
+                    <h2><span class="fa fa-pencil"></span>Kayıt Ol</h2>
+                    <div class="register-form">
+                        <form asp-controller="Home" asp-action="Register" method="post">
+                            <div asp-validation-summary="All" class="text-danger text-center"></div>
+                            <div class="fields-grid">
+                                <div class="styled-input agile-styled-input-top row">
+                                    <div class="col-sm-6">
+                                        <input name="Name" placeholder="Ad" type="text" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input name="Surname" placeholder="Soyad" type="text" />
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <input name="Mail" placeholder="Mail" type="text" />
+                                </div>
+                                <div class="styled-input">
+                                    <input name="School" placeholder="Okul" class="form-control" type="text" />
+                                </div>
+                                <div class="styled-input">
+                                    <input name="UserName" placeholder="Kullanıcı Adı" class="form-control" type="text" />
+                                </div>
+                                <div class="styled-input">
+                                    <div class="password-group form-group">
+                                        <input name="Password" placeholder="Şifre" class="form-control" type="password"  />
+                                    </div>
+                                </div>
+                                <div class="styled-input">
+                                    <div class="password-group form-group">
+                                        <input name="PasswordAgain" placeholder="Şifrenizi Tekrar Giriniz" class="form-control" type="password" />
+                                        <span class="text-danger"> @ViewBag.Alert</span>
+                                    </div>
+                                </div>
+                                <div class="styled-input agile-styled-input-top">
+                                    <select id="category2" name="EducationStatus" >
+                                        <option value="">Öğretim Durumu</option>
+                                        <option value="İlkOkul">İlkOkul</option>
+                                        <option value="Lise">Lise</option>
+                                        <option value="Üniversite">Üniversite</option>
+                                        <option value="Doktora">Doktora</option>
+                                        <option value="Yüksekokul">Yüksekokul</option>
+                                    </select>
+                                    <span></span>
+                                </div>
+                                <div class="clear"> </div>
+                                <label class="checkbox"><input type="checkbox" name="TermConfirm" value="true" checked /><a href="#">Kullanıcı Gizliliği ve Şartları  </a><i></i>onaylıyorum </label>
+                                <span class="text-danger"> @ViewBag.AlertTerm</span>
+                            </div>
+                            <input type="submit" value="Kayıt">
+                        </form>
+                    </div>
+                </div>
+                <div class="clear"> </div>
+            </div>
+            <div class="clear"> </div>
+        </div>
+        <!-- copyright -->
+        <p class="agile-copyright">© 2018 Kurs Kayıt Formu. Tüm hakları saklıdır. | <a href="https://w3layouts.com/" target="_blank">W3layouts</a> tarafından tasarlandı.</p>
+        <!-- //copyright -->
+    </section>
+    <!-- //section -->
+</body>
+<!-- //body ends -->
+</html>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Staff>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="content-title"><i class="fa fa-angle-right"></i>PERSONEL Listesi</h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    @if (Model.Count() > 0)
+                    {
+                        <table class="table table-striped table-advance table-hover table-responsive-xl">
+                            <thead>
+                                <tr>
+                                    <th>İsim</th>
+                                    <th>Soyisim</th>
+                                    <th>Mail</th>
+                                    <th>Telefon</th>
+                                    <th>Doğum Günü</th>
+                                    <th>İşe Başlangıç Tarihi</th>
+                                    <th>Skor</th>
+                                    <th>İŞLEMLER</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var staff in Model)
+                                {
+                                    <tr>
+                                        <td>@staff.Name</td>
+                                        <td>@staff.Surname</td>
+                                        <td>@staff.Mail</td>
+                                        <td>@staff.Phone</td>
+                                        <td>@staff.Birthday</td>
+                                        <td>@staff.DateOfStart</td>
+                                        <td>@staff.Score</td>
+                                        <td>
+                                            <a asp-controller="staff" asp-action="onay" asp-route-id="@staff.Id" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
+                                            <a asp-controller="staff" asp-action="manage" asp-route-id="@staff.Id" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+                                            <a asp-controller="staff" asp-action="delete" asp-route-id="@staff.Id" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <a asp-controller="Staff" asp-action="manage" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-plus "></i>EKLE</a>
+                    }
+                    else
+                    {
+                        <p class="text-black-50">Herhangi bir sonuca ulaşamadık. Lütfen bir şeyler ekleyin. <i class="fa fa-history"></i></p>
+                        <a asp-controller="Staff" asp-action="manage" class="list-create-btn btn btn-success btn-xs ml-2"><i class="fa fa-plus "></i>EKLE</a>
+                    }
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

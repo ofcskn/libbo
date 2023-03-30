@@ -1,0 +1,137 @@
+﻿@model Process
+@inject IUnitOfWork _uow
+@{
+    ViewData["Title"] = "Lend";
+}
+
+<!--main content start-->
+<section class="my-section">
+    <section class="my-wrapper">
+        <h3 class="mb"><i class="fa fa-angle-right"></i> Ödünç Al </h3>
+        <!-- row -->
+        <div class="row my-content">
+            <div class="col-md-12">
+                <div class="content-panel">
+                    <div class="form-panel">
+                        <form asp-controller="Process" asp-action="Lend" class="form-horizontal style-form" method="post">
+                            @if (Model.Id != 0)
+                            {
+                                <input type="hidden" asp-for="Id" />
+                            }
+                            <div class="form-group">
+                                <label asp-for="BookId" class="col-sm-2 col-sm-2 control-label">Kitap Adı</label>
+                                <select name="BookId" class="col-sm-3 custom-select">
+                                    @if (Model.Id != 0)
+                                    {
+                                        <option value="@Model.BookId">@_uow.Book.GetById(Model.BookId).Name</option>
+
+                                    }
+                                    else
+                                    {
+                                        <option value="">Lütfen kitap seçiniz</option>
+                                    }
+                                    @foreach (var book in _uow.Book.GetAll())
+                                    {
+                                        if (book.Status == false)
+                                        {
+                                            <option value="@book.Id">@book.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option class="bg-warning text-white" value="@book.Id" disabled>@book.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="BookId"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MemberId" class="col-sm-2 col-sm-2 control-label">Üye Adı</label>
+                                <select name="MemberId" class="col-sm-3 custom-select">
+                                    @{
+                                        var member2 = _uow.Member.GetById(Model.MemberId);
+                                    }
+                                    @if (Model.Id != 0)
+                                    {
+                                        <option value="@Model.MemberId">@member2.Name @member2.Surname</option>
+
+                                    }
+                                    else
+                                    {
+                                        <option value="">Lütfen üye seçiniz</option>
+                                    }
+                                    @foreach (var member in _uow.Member.GetAll())
+                                    {
+                                        <option value="@member.Id">@member.Name @member.Surname</option>
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="MemberId"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="StaffId" class="col-sm-2 col-sm-2 control-label">Teslim Edecek Personel</label>
+                                <select name="StaffId" class="col-sm-3 custom-select">
+                                    @{
+                                        var staff2 = _uow.Staff.GetById(Model.StaffId);
+                                    }
+                                    @if (Model.Id != 0)
+                                    {
+                                        <option value="@Model.StaffId">@staff2.Name @staff2.Surname</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="">Lütfen personel seçiniz</option>
+                                    }
+                                    @foreach (var staff in _uow.Staff.GetAll())
+                                    {
+                                        <option value="@staff.Id">@staff.Name @staff.Surname</option>
+                                    }
+                                </select>
+                                <span class="text-danger" asp-validation-for="StaffId"></span>
+                            </div>
+
+                            @if (Model.Id != 0)
+                            {
+                                <div class="form-group">
+                                    <label asp-for="GettingDate" class="col-sm-2 col-sm-2 control-label">Alış Tarihi</label>
+                                    <input type="datetime" name="GettingDate" value="@Model.GettingDate" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ReturningDate" class="col-sm-2 col-sm-2 control-label">Normal Teslim Ediş Tarihi</label>
+                                    <input type="datetime" name="ReturningDate" value="@Model.ReturningDate" />
+                                </div>
+                                <div class="form-group">
+                                    <label name="ReturnItDate" class="col-sm-2 col-sm-2 control-label">Üyenin Teslim Ediş Tarihi</label>
+                                    <input type="datetime" name="ReturningDate" value="@DateTime.Now" />
+                                </div>
+                                <div class="form-group">
+                                    <label name="MulctDate" class="col-sm-2 col-sm-2 control-label">Cezalı Gün Sayısı</label>
+                                    <input type="text" name="MulctDate" value="@ViewBag.result" disabled />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label asp-for="GettingDate" class="col-sm-2 col-sm-2 control-label">Alış Tarihi</label>
+                                    <input type="datetime" name="GettingDate" value="@DateTime.Now" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ReturningDate" class="col-sm-2 col-sm-2 control-label">Normal Teslim Ediş Tarihi</label>
+                                    <input type="datetime" name="ReturningDate" value="@DateTime.Now.AddDays(7)" />
+                                </div>
+                            }
+
+
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-success" value="Gönder" />
+                                <a asp-controller="Process" asp-action="List" class="btn btn-info">Listeye Dön</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /content-panel -->
+            </div>
+            <!-- /col-md-12 -->
+        </div>
+        <!-- /row -->
+    </section>
+</section>
+<!--main content end-->

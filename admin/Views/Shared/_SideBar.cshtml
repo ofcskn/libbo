@@ -1,0 +1,199 @@
+﻿@inject IUnitOfWork _uow
+
+<nav id="sidebar">
+    <div class="sidebar-header text-center">
+        <div class="user-content">
+            @if (_uow.Admin.GetTypeByAdmin == "admin")
+            {
+                <img class="user-image" src="~/img/@_uow.Admin.GetImageByAdmin" />
+                <p class="user-name">@_uow.Admin.GetNameByAdmin</p>
+                <span class="user-name">@_uow.Admin.GetMailByAdmin</span>
+            }
+            @if (_uow.Member.GetTypeByMember == "member")
+            {
+                <img class="user-image" src="~/upload/@_uow.Member.GetImageByMember" />
+                <p class="user-name">@_uow.Member.GetNameByMember</p>
+                <span class="user-name">@_uow.Member.GetMailByMember</span>
+            }
+            <p class="user-role"></p>
+
+        </div>
+    </div>
+
+    <ul class="components">
+        <li class="list-title">
+            <p>Admin Panelim</p>
+            <span></span>
+        </li>
+        @if (_uow.Admin.GetTypeByAdmin == "admin")
+        {
+            <li>
+                <a asp-controller="dashboard" asp-action="index"><i class="fa fa-home"></i>Anasayfa</a>
+            </li>
+            <li>
+                <a href="/"><i class="fa fa-hacker-news"></i>Vitrin</a>
+            </li>
+            <li>
+                <a href="#dashboardSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-dashboard"></i>İstatistikler</a>
+                <ul class="collapse list-unstyled" id="dashboardSubMenu">
+
+                    <li>
+                        <a asp-controller="dashboard" asp-action="weather"><i class="fa fa-umbrella"></i>Hava Durumu</a>
+                    </li>
+                    <li>
+                        <a asp-controller="dashboard" asp-action="gallery"><i class="fa fa-image"></i>Slider Galeri</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a asp-controller="ToDoList" asp-action="List"><i class="fa fa-check-square"></i>Yapılacaklar Listesi</a>
+            </li>
+            <li>
+                <a href="#categorySubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list"></i>Kategoriler</a>
+                <ul class="collapse list-unstyled" id="categorySubMenu">
+                    <li>
+                        <a asp-controller="category" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="category" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#bookProcessSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-book"></i>Kitaplar</a>
+                <ul class="collapse list-unstyled" id="bookProcessSubmenu">
+                    <li>
+                        <a asp-controller="book" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="book" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#authorProcessSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-pencil"></i>Yazarlar</a>
+                <ul class="collapse list-unstyled" id="authorProcessSubmenu">
+                    <li>
+                        <a asp-controller="author" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="author" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#mediaSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-image"></i>Medya</a>
+                <ul class="collapse list-unstyled" id="mediaSubMenu">
+                    <li>
+                        <a asp-controller="media" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="media" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#processSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-history"></i>İşlemler</a>
+                <ul class="collapse list-unstyled" id="processSubmenu">
+                    <li>
+                        <a asp-controller="process" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="process" asp-action="borrow"><i class="fa fa-arrow-left"></i>Ödünç Al</a>
+                    </li>
+                    @*<li>
+                        <a asp-controller="process" asp-action="forgive"><i class="fa fa-gift"></i>Bağış Yap</a>
+                    </li>*@
+                    <li>
+                        <a asp-controller="mulct" asp-action="list"><i class="fa fa-turkish-lira"></i>Cezalar</a>
+                    </li>
+                </ul>
+
+            </li>
+            <li>
+                <a href="#messageSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-envelope"></i>Mesajlar</a>
+                <ul class="collapse list-unstyled" id="messageSubMenu">
+                    <li>
+                        <a asp-controller="contact" asp-action="list"><i class="fa fa-list"></i>İletişim Formu Mesajları</a>
+                    </li>
+                    <li>
+                        <a asp-controller="message" asp-action="mail"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#staffProcessSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-user-md"></i>Personeller</a>
+                <ul class="collapse list-unstyled" id="staffProcessSubmenu">
+                    <li>
+                        <a asp-controller="staff" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="staff" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a asp-controller="Member" asp-action="List"><i class="fa fa-group"></i>Üyeler</a>
+            </li>
+            <li>
+                <a href="#announcementSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-volume-down"></i>Duyurular</a>
+                <ul class="collapse list-unstyled" id="announcementSubmenu">
+                    <li>
+                        <a asp-controller="announcement" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="announcement" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-user"></i>Yöneticiler</a>
+                <ul class="collapse list-unstyled" id="adminSubmenu">
+                    <li>
+                        <a asp-controller="admin" asp-action="list"><i class="fa fa-list"></i>Liste</a>
+                    </li>
+                    <li>
+                        <a asp-controller="admin" asp-action="manage"><i class="fa fa-plus"></i>Ekle</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a asp-controller="setting" asp-action="index"><i class="fa fa-cog"></i>Ayarlar</a>
+            </li>
+        }
+        @if (_uow.Member.GetTypeByMember == "member")
+        {
+            <li>
+                <a href="/"><i class="fa fa-hacker-news"></i>Vitrin</a>
+            </li>
+            <li>
+                <a href="#librarySubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-bookmark"></i>Kütüphane</a>
+                <ul class="collapse list-unstyled" id="librarySubMenu">
+                    <li>
+                        <a asp-controller="book" asp-action="list"><i class="fa fa-book"></i>Kitaplar</a>
+                    </li>
+                    <li>
+                        <a asp-controller="author" asp-action="list"><i class="fa fa-pencil"></i>Yazarlar</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a asp-controller="message" asp-action="member"><i class="fa fa-envelope"></i>Mesajlar</a>
+            </li>
+            <li>
+                <a asp-controller="book" asp-action="history"><i class="fa fa-book"></i>Kitap Geçmişim</a>
+            </li>
+            <li>
+                <a asp-controller="announcement" asp-action="list"><i class="fa fa-volume-down"></i>Duyurular</a>
+            </li>
+            <li>
+                <a asp-controller="setting" asp-action="index"><i class="fa fa-cog"></i>Ayarlar</a>
+            </li>
+        }
+
+        <li class="clearfix"></li>
+        <li class="log-out-item">
+            <a class="log-out-link" asp-controller="home" asp-action="logout"><i class="fa fa-sign-out"></i>ÇIKIŞ YAP</a>
+        </li>
+    </ul>
+</nav>
