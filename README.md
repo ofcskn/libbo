@@ -19,7 +19,7 @@ Project Contents:
 
 # Video Preview
 
-![Video Preview](https://www.youtube.com/watch?v=_oiSsV2etxs)
+[Video Preview](https://www.youtube.com/watch?v=_oiSsV2etxs)
 
 # Contact Information
 
